@@ -33,37 +33,41 @@ class FlutterWebAuth2WindowsPlugin extends FlutterWebAuth2Platform {
       '''Launching webview with url: $url, callbackUrlScheme: $callbackUrlScheme, tmpDir: ${(await getTemporaryDirectory()).path}''',
     );
     await WebviewWindow.clearAll();
-    webview = await WebviewWindow.create(
-      configuration: CreateConfiguration(
-        windowHeight: 720,
-        windowWidth: 1280,
-        title: 'Authenticate',
-        titleBarTopPadding: 0,
-        userDataFolderWindows: (await getApplicationCacheDirectory()).path,
-      ),
-    );
-    webview!.addOnUrlRequestCallback((url) {
-      final uri = Uri.parse(url);
-      if (uri.scheme == callbackUrlScheme) {
-        authenticated = true;
-        c.complete(url);
-        webview?.stop();
-        webview?.close();
-      }
-    });
-    unawaited(
-      webview!.onClose.whenComplete(
-        () => {
-          if (!authenticated)
-            {
-              c.completeError(
-                PlatformException(code: 'CANCELED', message: 'User canceled'),
-              ),
-            },
-        },
-      ),
-    );
-    webview!.launch(url);
+    try {
+      webview = await WebviewWindow.create(
+        configuration: CreateConfiguration(
+          windowHeight: 720,
+          windowWidth: 1280,
+          title: 'Authenticate',
+          titleBarTopPadding: 0,
+          userDataFolderWindows: (await getTemporaryDirectory()).path,
+        ),
+      );
+      webview!.addOnUrlRequestCallback((url) {
+        final uri = Uri.parse(url);
+        if (uri.scheme == callbackUrlScheme) {
+          authenticated = true;
+          c.complete(url);
+          webview?.stop();
+          webview?.close();
+        }
+      });
+      unawaited(
+        webview!.onClose.whenComplete(
+          () => {
+            if (!authenticated)
+              {
+                c.completeError(
+                  PlatformException(code: 'CANCELED', message: 'User canceled'),
+                ),
+              },
+          },
+        ),
+      );
+      webview!.launch(url);
+    } on PlatformException catch (e) {
+      c.completeError(e);
+    }
     return c.future;
   }
 }
