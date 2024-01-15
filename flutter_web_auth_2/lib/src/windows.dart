@@ -7,8 +7,8 @@ import 'package:flutter_web_auth_2_platform_interface/flutter_web_auth_2_platfor
 import 'package:path_provider/path_provider.dart';
 
 class FlutterWebAuth2WindowsPlugin extends FlutterWebAuth2Platform {
-  bool authenticated = false;
-  Webview? webview;
+  static bool authenticated = false;
+  static Webview? webview;
 
   static void registerWith() {
     FlutterWebAuth2Platform.instance = FlutterWebAuth2WindowsPlugin();
