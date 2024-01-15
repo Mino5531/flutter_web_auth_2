@@ -38,7 +38,7 @@ class FlutterWebAuth2WindowsPlugin extends FlutterWebAuth2Platform {
         windowWidth: 1280,
         title: 'Authenticate',
         titleBarTopPadding: 0,
-        userDataFolderWindows: (await getTemporaryDirectory()).path,
+        userDataFolderWindows: (await getApplicationCacheDirectory()).path,
       ),
     );
     webview!.addOnUrlRequestCallback((url) {
