@@ -32,8 +32,8 @@ class FlutterWebAuth2WindowsPlugin extends FlutterWebAuth2Platform {
     debugPrint(
       '''Launching webview with url: $url, callbackUrlScheme: $callbackUrlScheme, tmpDir: ${(await getTemporaryDirectory()).path}''',
     );
-    await WebviewWindow.clearAll();
     try {
+      await WebviewWindow.clearAll();
       webview = await WebviewWindow.create(
         configuration: CreateConfiguration(
           windowHeight: 720,
