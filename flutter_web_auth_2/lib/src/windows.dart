@@ -49,6 +49,7 @@ class FlutterWebAuth2WindowsPlugin extends FlutterWebAuth2Platform {
           authenticated = true;
           await webview?.stop();
           webview?.close();
+          webview = null;
           c.complete(url);
         }
       });
