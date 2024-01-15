@@ -43,13 +43,13 @@ class FlutterWebAuth2WindowsPlugin extends FlutterWebAuth2Platform {
           userDataFolderWindows: (await getTemporaryDirectory()).path,
         ),
       );
-      webview!.addOnUrlRequestCallback((url) {
+      webview!.addOnUrlRequestCallback((url) async {
         final uri = Uri.parse(url);
         if (uri.scheme == callbackUrlScheme) {
           authenticated = true;
-          c.complete(url);
-          webview?.stop();
+          await webview?.stop();
           webview?.close();
+          c.complete(url);
         }
       });
       unawaited(
