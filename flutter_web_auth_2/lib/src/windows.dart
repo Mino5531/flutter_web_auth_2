@@ -46,6 +46,11 @@ class FlutterWebAuth2WindowsPlugin extends FlutterWebAuth2Platform {
       if (uri.scheme == callbackUrlScheme) {
         authenticated = true;
         webview?.close();
+        /**
+         * Not setting the webview to null will cause a crash if the 
+         * application tries to open another webview
+         */
+        webview = null;
         c.complete(url);
       }
     });
