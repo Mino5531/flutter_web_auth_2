@@ -44,6 +44,8 @@ const _defaultLandingPage = '''
 </html>
 ''';
 
+enum FlutterWebAuth2DesktopAuthMethod { browser, webview }
+
 class FlutterWebAuth2Options {
   /// **Only has an effect on iOS and MacOS!**
   /// If this is `true`, an ephemeral web browser session
@@ -95,6 +97,28 @@ class FlutterWebAuth2Options {
   /// AND DOES NOT CAUSE ANY HARM. IFRAMES CAN BE EXPLOITED IN MANY WAYS BY
   /// MALICIOUS ATTACKERS!
   final bool silentAuth;
+  
+  /// **Only has an effect on windows**
+  /// When set to `FlutterWebAuth2DesktopAuthMethod.browser` the application 
+  /// will try to use the system default browser for authentication. 
+  /// This will only support `http://localhost:{port}` callback schemes.
+  /// When set to `FlutterWebAuth2DesktopAuthMethod.webview` the application
+  /// will open a new window/instance of your application containing only a webview.
+  /// When using this method you are free to use any callback scheme you'd like 
+  /// however you must install microsoft's webview as a dependency.
+  /// Additionally you must alter your main method a bit (see documentation)
+  final FlutterWebAuth2DesktopAuthMethod windowsAuthenticationMethod;
+
+  /// **Only has an effect on linux**
+  /// When set to `FlutterWebAuth2DesktopAuthMethod.browser` the application 
+  /// will try to use the system default browser for authentication. 
+  /// This will only support `http://localhost:{port}` callback schemes.
+  /// When set to `FlutterWebAuth2DesktopAuthMethod.webview` the application
+  /// will open a new window/instance of your application containing only a webview.
+  /// When using this method you are free to use any callback scheme you'd like 
+  /// however you must install webkit2gtk-4.1 as a dependency.
+  /// Additionally you must alter your main method a bit (see documentation)
+  final FlutterWebAuth2DesktopAuthMethod linuxAuthenticationMethod;
 
   const FlutterWebAuth2Options({
     bool? preferEphemeral,
@@ -104,11 +128,17 @@ class FlutterWebAuth2Options {
     int? timeout,
     String? landingPageHtml,
     bool? silentAuth,
+    FlutterWebAuth2DesktopAuthMethod? windowsAuthenticationMethod,
+    FlutterWebAuth2DesktopAuthMethod? linuxAuthenticationMethod,
   })  : preferEphemeral = preferEphemeral ?? false,
         intentFlags = intentFlags ?? defaultIntentFlags,
         timeout = timeout ?? 5 * 60,
         landingPageHtml = landingPageHtml ?? _defaultLandingPage,
-        silentAuth = silentAuth ?? false;
+        silentAuth = silentAuth ?? false,
+        windowsAuthenticationMethod = windowsAuthenticationMethod ??
+            FlutterWebAuth2DesktopAuthMethod.browser,
+        linuxAuthenticationMethod = linuxAuthenticationMethod ??
+            FlutterWebAuth2DesktopAuthMethod.browser;
 
   FlutterWebAuth2Options.fromJson(Map<String, dynamic> json)
       : this(
@@ -119,6 +149,8 @@ class FlutterWebAuth2Options {
           timeout: json['timeout'],
           landingPageHtml: json['landingPageHtml'],
           silentAuth: json['silentAuth'],
+          windowsAuthenticationMethod: json['windowsAuthenticationMethod'],
+          linuxAuthenticationMethod: json['linuxAuthenticationMethod'],
         );
 
   Map<String, dynamic> toJson() => {
@@ -129,5 +161,7 @@ class FlutterWebAuth2Options {
         'timeout': timeout,
         'landingPageHtml': landingPageHtml,
         'silentAuth': silentAuth,
+        'windowsAuthenticationMethod': windowsAuthenticationMethod,
+        'linuxAuthenticationMethod': linuxAuthenticationMethod,
       };
 }

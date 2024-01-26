@@ -8,9 +8,8 @@ import 'package:flutter_web_auth_2_platform_interface/flutter_web_auth_2_platfor
 
 export 'src/options.dart';
 export 'src/unsupported.dart'
-    if (dart.library.io) 'src/server.dart'
+    if (dart.library.io) 'src/desktop.dart'
     if (dart.library.html) 'src/web.dart';
-export 'src/windows.dart';
 
 class _OnAppLifecycleResumeObserver extends WidgetsBindingObserver {
   final Function onResumed;
