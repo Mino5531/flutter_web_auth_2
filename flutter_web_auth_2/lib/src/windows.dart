@@ -25,7 +25,6 @@ class FlutterWebAuth2WindowsPlugin extends FlutterWebAuth2Platform {
       throw StateError('Webview is not available');
     }
     //Reset
-    authenticated = false;
     webview?.close();
 
     final c = Completer<String>();
@@ -44,7 +43,6 @@ class FlutterWebAuth2WindowsPlugin extends FlutterWebAuth2Platform {
     webview!.addOnUrlRequestCallback((url) {
       final uri = Uri.parse(url);
       if (uri.scheme == callbackUrlScheme) {
-        authenticated = true;
         webview?.close();
         /**
          * Not setting the webview to null will cause a crash if the 
@@ -55,6 +53,10 @@ class FlutterWebAuth2WindowsPlugin extends FlutterWebAuth2Platform {
       }
     });
     unawaited(
+      /**
+       * This is only called when the user closes the window, 
+       * not when it is closed programmatically
+       */
       webview!.onClose.whenComplete(
         () {
           /**
@@ -62,11 +64,9 @@ class FlutterWebAuth2WindowsPlugin extends FlutterWebAuth2Platform {
            * application tries to open another webview
            */
           webview = null;
-          if (!authenticated) {
-            c.completeError(
-              PlatformException(code: 'CANCELED', message: 'User canceled'),
-            );
-          }
+          c.completeError(
+            PlatformException(code: 'CANCELED', message: 'User canceled'),
+          );
         },
       ),
     );
