@@ -35,6 +35,7 @@ class FlutterWebAuth2WebViewPlugin extends FlutterWebAuth2Platform {
         userDataFolderWindows: (await getTemporaryDirectory()).path,
       ),
     );
+    await _webview!.openDevToolsWindow();
     _webview!.addOnUrlRequestCallback((url) {
       final uri = Uri.parse(url);
       if (uri.scheme == callbackUrlScheme) {
