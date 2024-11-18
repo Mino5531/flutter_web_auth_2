@@ -177,6 +177,8 @@ on iOS, use `https` as the provided `callbackUrlScheme`:
 final result = await FlutterWebAuth2.authenticate(url: "https://my-custom-app.com/connect", callbackUrlScheme: "https");
 ```
 
+**Note:** Your `url` value must use the `https` scheme. Otherwise the authentication prompt will not correctly initialize and you will only see a white browser window.
+
 ### Web
 
 On the Web platform, an endpoint must be created that captures the callback URL and sends it to the application using the JavaScript `postMessage()` method. In the `./web` folder of the project, create an HTML file named, e.g. `auth.html` with content:
@@ -369,3 +371,7 @@ This seems to be a bug in `ASWebAuthenticationSession` and no workarounds have b
 ### Error on macOS if Chrome is default browser
 
 This seems to be a bug in `ASWebAuthenticationSession` and no workarounds have been found yet. Please see issue [#136](https://github.com/LinusU/flutter_web_auth/issues/136) for more info.
+
+### White browser window on iOS that can not be interacted with
+
+Please make sure that your authentication url is using the `https` scheme e.g. `https://my-domain.com`.
