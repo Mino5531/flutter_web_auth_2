@@ -1,3 +1,7 @@
+## 4.0.2
+
+- 🌹 Improve README (additions to migration guide and Google scopes)
+
 ## 4.0.1
 
 - 🌹 Update `flutter_lints` to `5.x` - should not really change anything!
